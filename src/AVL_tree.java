@@ -102,7 +102,7 @@ public class AVL_tree {
             }
         }
         if(root == null) return root;
-        root.height = Math.max(height(root.left),height(root.right));
+        root.height = Math.max(height(root.left),height(root.right)) + 1;
         int balance = getBal(root);
         if(balance > 1 && getBal(root.left)>=0)
             rightRotate(root);
