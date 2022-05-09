@@ -71,7 +71,54 @@ public class AVL_tree {
         preOrder(root.left);
         preOrder(root.right);
     }
+    public Node min(Node root){
+        Node temp = root;
+        while(temp.left != null) temp = temp.left;
+        return temp;
+    }
+        public Node delete(Node root,int data){
+        if(root == null) return root;
+        if(data < root.data) root.left = delete(root.left,data);
+        else if(data > root.data) root.right = delete(root.right,data);
+        else {
+            if(root.left == null || root.right == null)
+            {
+                Node temp = null;
+                if(temp == root.left) temp = root.right;
+                else temp = root.left;
 
+                if(temp == null) // No child
+                {
+                    temp = root;
+                    root = null;
+                }
+                else  // One child
+                    root = temp;
+            }
+            else{
+                Node temp = min(root.right);
+                root.data = temp.data;
+                root.right = delete(root.right,temp.data);
+            }
+        }
+        if(root == null) return root;
+        root.height = Math.max(height(root.left),height(root.right));
+        int balance = getBal(root);
+        if(balance > 1 && getBal(root.left)>=0)
+            rightRotate(root);
+        if(balance > 1 && getBal(root.left)<0){
+            root.left = leftRotate(root.left);
+            return rightRotate(root);
+        }
+        if(balance < -1 && getBal(root.right)<=0)
+            leftRotate(root);
+        if(balance < -1 && getBal(root.right)>0)
+        {
+            root.right = rightRotate(root.right);
+            return leftRotate(root);
+        }
+        return root;
+    }
     public static void main(String[] args) {
     AVL_tree tree = new AVL_tree();
     tree.root = tree.insert(tree.root,10);
